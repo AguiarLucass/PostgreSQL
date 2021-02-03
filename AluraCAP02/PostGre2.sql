@@ -164,4 +164,95 @@ FROM (
 WHERE NUMERO_CURSOS >1;
 
 
+-- 01 Funções de strings
+
+
+SELECT * FROM ALUNO;
+
+SELECT (primeiro_nome || ' ' || ultimo_nome) as Nome_Completo from aluno;
+
+
+SELECT CONCAT('LUCAS', '', NULL);
+
+
+SELECT CONCAT('LUCAS', '', NULL, 'SILVA');
+
+SELECT UPPER(CONCAT('LUCAS', '', NULL, 'SILVA'));
+
+SELECT TRIM(UPPER(CONCAT('LUCAS', '', NULL, 'SILVA')));
+
+-- Funções de data
+
+--forma complexa, com cálculo
+SELECT 	(primeiro_nome || ' ' || ultimo_nome) as Nome_Completo, 
+		(NOW()::DATE -  DATA_NASCIMENTO) / 365 as idade from aluno;
+		
+-- usando o age
+SELECT 	(primeiro_nome || ' ' || ultimo_nome) as Nome_Completo, 
+		  age(data_nascimento) as idade 
+		   from aluno;
+		   
+--extraindo só o ano
+SELECT 	(primeiro_nome || ' ' || ultimo_nome) as Nome_Completo, 
+		  extract(year from age(data_nascimento)) as idade 
+		   from aluno;
+		   
+-- Funções matemáticas
+
+select pi();
+
+select @ 53545;
+
+--Conversão de dados
+
+select now()::date;
+
+select to_char(now(), 'DD/MM/YYYY');
+
+
+select to_char(now(), 'DD/MONTH/YYYY');
+
+
+SELECT TO_CHAR(128.3::REAL, '999D9');
+
+
+-- View
+
+CREATE VIEW VW_CURSOS_POR_CATEGORIA AS
+SELECT 	CATEGORIA.NOME AS CATEGORIA,
+		COUNT(CURSO.ID) AS NUMERO_CURSOS
+		FROM CATEGORIA
+		JOIN CURSO ON CURSO.CATEGORIA_ID = CATEGORIA.ID
+		GROUP BY CATEGORIA;
+
+
+SELECT * FROM VW_CURSOS_POR_CATEGORIA;
+
+
+
+--APLICANDO FILTROS NA VIEW
+
+SELECT CATEGORIA 
+FROM VW_CURSOS_POR_CATEGORIA AS CATEGORIA_CURSOS
+WHERE NUMERO_CURSOS >=1; 
+
+
+CREATE VIEW VW_CURSOS_PHP AS 
+SELECT NOME FROM CURSO
+WHERE ID = 3;
+
+
+SELECT * FROM VW_CURSOS_PHP;
+
+
+-- Trabalhando na View
+
+SELECT 	CATEGORIA.ID AS CATEGORIA_ID,
+		VW_CURSOS_POR_CATEGORIA.*	
+FROM VW_CURSOS_POR_CATEGORIA 
+JOIN CATEGORIA ON CATEGORIA.NOME = VW_CURSOS_POR_CATEGORIA.CATEGORIA; 
+
+
+
+
 
